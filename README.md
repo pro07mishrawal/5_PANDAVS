@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -245,7 +246,7 @@
       lifelineBtn.disabled = true;
     }
 
-
+    loadQuestion();
   </script>
 </body>
 </html>
