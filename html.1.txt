@@ -245,7 +245,7 @@
       lifelineBtn.disabled = true;
     }
 
-
+    loadQuestion();
   </script>
 </body>
 </html>
