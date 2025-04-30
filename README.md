@@ -245,60 +245,6 @@
       lifelineBtn.disabled = true;
     }
 
-    loadQuestion();
-    const questionSound = document.getElementById("questionSound");
-const correctSound = document.getElementById("correctSound");
-const wrongSound = document.getElementById("wrongSound");
-const winSound = document.getElementById("winSound");
-
-function playSound(sound) {
-  if (sound) {
-    sound.currentTime = 0;
-    sound.play();
-  }
-}
-
-function loadQuestion() {
-  const q = questions[currentQuestion];
-  questionEl.textContent = q.question;
-  optionBtns.forEach((btn, index) => {
-    btn.textContent = `${String.fromCharCode(65 + index)}. ${q.options[index]}`;
-    btn.disabled = false;
-    btn.style.visibility = "visible";
-    btn.classList.remove("correct", "wrong");
-  });
-  resultEl.textContent = "";
-  prizeEl.textContent = `Prize: ₹${currentPrize}`;
-  levelEl.textContent = `Level: ${Math.min(5, Math.floor(currentQuestion / 2) + 1)}`;
-
-  // Play question thinking sound
-  playSound(questionSound);
-}
-
-function selectAnswer(index) {
-  const correct = questions[currentQuestion].answer;
-  disableAllOptions();
-
-  if (index === correct) {
-    optionBtns[index].classList.add("correct");
-    currentPrize = prizeLevels[currentQuestion];
-    resultEl.textContent = `✅ Correct! You won ₹${currentPrize}`;
-    playSound(correctSound);
-
-    currentQuestion++;
-    if (currentQuestion < questions.length) {
-      setTimeout(loadQuestion, 2000);
-    } else {
-      resultEl.textContent = `🏆 Congratulations! You are a Crorepati! Total: ₹${currentPrize}`;
-      playSound(winSound);
-    }
-  } else {
-    optionBtns[index].classList.add("wrong");
-    optionBtns[correct].classList.add("correct");
-    resultEl.textContent = `❌ Wrong! Correct answer was: ${questions[currentQuestion].options[correct]}`;
-    playSound(wrongSound);
-  }
-}
 
   </script>
 </body>
