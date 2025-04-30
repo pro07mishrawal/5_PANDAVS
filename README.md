@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -5,74 +6,83 @@
   <title>Kaun Banega Crorepati</title>
   <style>
     body {
-  font-family: Arial, sans-serif;
-  background-color: #0f3057;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
+      font-family: Arial, sans-serif;
+      background-color: #0f3057;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-.container {
-  text-align: center;
-  max-width: 600px;
-  padding: 20px;
-  background-color: #00587a;
-  border-radius: 10px;
-}
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+      background-color: #00587a;
+      border-radius: 10px;
+    }
 
-h1 {
-  margin-bottom: 20px;
-}
+    h1 {
+      margin-bottom: 10px;
+    }
 
-#question {
-  font-size: 1.2em;
-  margin-bottom: 20px;
-}
+    #prize, #level {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
 
-.options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
+    #question {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
 
-.option-btn {
-  padding: 10px;
-  background-color: #00adb5;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
 
-.option-btn:disabled {
-  background-color: #444;
-  cursor: not-allowed;
-}
+    .option-btn {
+      padding: 10px;
+      background-color: #00adb5;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-.lifeline-box {
-  margin-top: 20px;
-}
+    .option-btn.correct {
+      background-color: #28a745 !important;
+    }
 
-#result {
-  margin-top: 20px;
-  font-size: 1.1em;
-}
+    .option-btn.wrong {
+      background-color: #dc3545 !important;
+    }
 
-#prize {
-  margin-bottom: 10px;
-  font-size: 1.1em;
-  font-weight: bold;
-}
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
 
+    .lifeline-box {
+      margin-top: 20px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🪙 Kaun Banega Crorepati 🪙</h1>
+    <div id="level">Level: 1</div>
     <div id="prize">Prize: ₹0</div>
     <div id="question-box">
       <h2 id="question">Loading...</h2>
@@ -92,144 +102,151 @@ h1 {
 
   <script>
     const questions = [
-  {
-    question: "Which planet is known as the Red Planet?",
-    options: ["Earth", "Venus", "Mars", "Jupiter"],
-    answer: 2,
-  },
-  {
-    question: "Who wrote the Indian National Anthem?",
-    options: [
-      "Bankim Chandra Chatterjee",
-      "Rabindranath Tagore",
-      "Subhash Chandra Bose",
-      "Jawaharlal Nehru",
-    ],
-    answer: 1,
-  },
-  {
-    question: "What is the capital of Australia?",
-    options: ["Sydney", "Melbourne", "Perth", "Canberra"],
-    answer: 3,
-  },
-  {
-    question: "Who was the first Prime Minister of India?",
-    options: [
-      "Sardar Patel",
-      "Rajendra Prasad",
-      "Jawaharlal Nehru",
-      "Lal Bahadur Shastri",
-    ],
-    answer: 2,
-  },
-  {
-    question: "Which is the largest ocean?",
-    options: ["Atlantic", "Indian", "Pacific", "Arctic"],
-    answer: 2,
-  },
-   {
-    question: "Which is the Dumbest Sea Creature?",
-    options: ["Shark", "Dolphin", "Ocean Sunfish", "Dumbo octopus"],
-    answer: 2,
-  },
-    {
-    question: "Where was the first FIFA World Cup held?",
-    options: ["Brazil", "Uruguay", "Nepal", "China"],
-    answer: 1,
-  },
-   {
-    question: "Which is the Richest Football Club?",
-    options: ["Chelsea FC", "FC Barcelona", "Manchester City", "Real Madrid"],
-    answer: 3,
-  },
-    {
-    question: "When was first World War started?",
-    options: ["1914", "1969", "1823", "1916"],
-    answer: 0,
-  },
-   {
-    question: "Strongest man in the world?",
-    options: ["Tarun Gill", "Tom Stoltman", "Dwayne Johnson", "Nick Best"],
-    answer: 1,
-  },
-       {
-    question: "What is the speed of Light?",
-    options: ["299 792 458 m / s", "299 612 595 m / s", "299 911 458 m / s", "297 792 696 m / s"],
-    answer: 0,
-  },
-];
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Venus", "Mars", "Jupiter"],
+        answer: 2,
+      },
+      {
+        question: "Who wrote the Indian National Anthem?",
+        options: [
+          "Bankim Chandra Chatterjee",
+          "Rabindranath Tagore",
+          "Subhash Chandra Bose",
+          "Jawaharlal Nehru",
+        ],
+        answer: 1,
+      },
+      {
+        question: "What is the capital of Australia?",
+        options: ["Sydney", "Melbourne", "Perth", "Canberra"],
+        answer: 3,
+      },
+      {
+        question: "Who was the first Prime Minister of India?",
+        options: [
+          "Sardar Patel",
+          "Rajendra Prasad",
+          "Jawaharlal Nehru",
+          "Lal Bahadur Shastri",
+        ],
+        answer: 2,
+      },
+      {
+        question: "Which is the largest ocean?",
+        options: ["Atlantic", "Indian", "Pacific", "Arctic"],
+        answer: 2,
+      },
+      {
+        question: "Which is the Dumbest Sea Creature?",
+        options: ["Shark", "Dolphin", "Ocean Sunfish", "Dumbo octopus"],
+        answer: 2,
+      },
+      {
+        question: "Where was the first FIFA World Cup held?",
+        options: ["Brazil", "Uruguay", "Nepal", "China"],
+        answer: 1,
+      },
+      {
+        question: "Which is the Richest Football Club?",
+        options: ["Chelsea FC", "FC Barcelona", "Manchester City", "Real Madrid"],
+        answer: 3,
+      },
+      {
+        question: "When was first World War started?",
+        options: ["1914", "1969", "1823", "1916"],
+        answer: 0,
+      },
+      {
+        question: "Strongest man in the world?",
+        options: ["Tarun Gill", "Tom Stoltman", "Dwayne Johnson", "Nick Best"],
+        answer: 1,
+      },
+      {
+        question: "What is the speed of Light?",
+        options: ["299 792 458 m / s", "299 612 595 m / s", "299 911 458 m / s", "297 792 696 m / s"],
+        answer: 0,
+      },
+    ];
 
-const prizeLevels = [1000, 5000, 10000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000];
-let currentQuestion = 0;
-let currentPrize = 0;
-let lifelineUsed = false;
+    const prizeLevels = [
+      1000, 5000, 10000, 50000, 100000,
+      250000, 500000, 1000000, 2500000, 5000000, 10000000
+    ];
 
-const questionEl = document.getElementById("question");
-const prizeEl = document.getElementById("prize");
-const resultEl = document.getElementById("result");
-const optionBtns = document.querySelectorAll(".option-btn");
-const lifelineBtn = document.getElementById("lifeline-btn");
+    let currentQuestion = 0;
+    let currentPrize = 0;
+    let lifelineUsed = false;
 
-function loadQuestion() {
-  const q = questions[currentQuestion];
-  questionEl.textContent = q.question;
-  optionBtns.forEach((btn, index) => {
-    btn.textContent = `${String.fromCharCode(65 + index)}. ${q.options[index]}`;
-    btn.disabled = false;
-    btn.style.visibility = "visible";
-  });
-  resultEl.textContent = "";
-  prizeEl.textContent = `Prize: ₹${currentPrize}`;
-}
+    const questionEl = document.getElementById("question");
+    const prizeEl = document.getElementById("prize");
+    const resultEl = document.getElementById("result");
+    const levelEl = document.getElementById("level");
+    const optionBtns = document.querySelectorAll(".option-btn");
+    const lifelineBtn = document.getElementById("lifeline-btn");
 
-function selectAnswer(index) {
-  const correct = questions[currentQuestion].answer;
-  if (index === correct) {
-    currentPrize = prizeLevels[currentQuestion];
-    resultEl.textContent = `✅ Correct! You won ₹${currentPrize}`;
-    currentQuestion++;
-    if (currentQuestion < questions.length) {
-      setTimeout(loadQuestion, 1500);
-    } else {
-      resultEl.textContent = `🏆 Congratulations! You are a Crorepati! Total: ₹${currentPrize}`;
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+      optionBtns.forEach((btn, index) => {
+        btn.textContent = `${String.fromCharCode(65 + index)}. ${q.options[index]}`;
+        btn.disabled = false;
+        btn.style.visibility = "visible";
+        btn.classList.remove("correct", "wrong");
+      });
+      resultEl.textContent = "";
+      prizeEl.textContent = `Prize: ₹${currentPrize}`;
+      levelEl.textContent = `Level: ${Math.min(5, Math.floor(currentQuestion / 2) + 1)}`;
+    }
+
+    function selectAnswer(index) {
+      const correct = questions[currentQuestion].answer;
       disableAllOptions();
+
+      if (index === correct) {
+        optionBtns[index].classList.add("correct");
+        currentPrize = prizeLevels[currentQuestion];
+        resultEl.textContent = `✅ Correct! You won ₹${currentPrize}`;
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          setTimeout(loadQuestion, 2000);
+        } else {
+          resultEl.textContent = `🏆 Congratulations! You are a Crorepati! Total: ₹${currentPrize}`;
+        }
+      } else {
+        optionBtns[index].classList.add("wrong");
+        optionBtns[correct].classList.add("correct");
+        resultEl.textContent = `❌ Wrong! Correct answer was: ${questions[currentQuestion].options[correct]}`;
+      }
     }
-  } else {
-    resultEl.textContent = `❌ Wrong! Correct answer was: ${questions[currentQuestion].options[correct]}`;
-    disableAllOptions();
-  }
-}
 
-function disableAllOptions() {
-  optionBtns.forEach((btn) => (btn.disabled = true));
-}
-
-function useLifeline() {
-  if (lifelineUsed) return;
-  lifelineUsed = true;
-  lifelineBtn.disabled = true;
-
-  const correct = questions[currentQuestion].answer;
-  const hideCount = 2;
-  let hidden = 0;
-  while (hidden < hideCount) {
-    const rand = Math.floor(Math.random() * 4);
-    if (rand !== correct && optionBtns[rand].style.visibility !== "hidden") {
-      optionBtns[rand].style.visibility = "hidden";
-      hidden++;
+    function disableAllOptions() {
+      optionBtns.forEach(btn => btn.disabled = true);
     }
-  }
-}
 
-function quitGame() {
-  resultEl.textContent = `🏁 You quit! Total winnings: ₹${currentPrize}`;
-  disableAllOptions();
-  lifelineBtn.disabled = true;
-}
+    function useLifeline() {
+      if (lifelineUsed) return;
+      lifelineUsed = true;
+      lifelineBtn.disabled = true;
 
-loadQuestion();
+      const correct = questions[currentQuestion].answer;
+      let removed = 0;
+      while (removed < 2) {
+        const rand = Math.floor(Math.random() * 4);
+        if (rand !== correct && optionBtns[rand].style.visibility !== "hidden") {
+          optionBtns[rand].style.visibility = "hidden";
+          removed++;
+        }
+      }
+    }
 
+    function quitGame() {
+      resultEl.textContent = `🏁 You quit! Total winnings: ₹${currentPrize}`;
+      disableAllOptions();
+      lifelineBtn.disabled = true;
+    }
+
+    loadQuestion();
   </script>
 </body>
 </html>
-
