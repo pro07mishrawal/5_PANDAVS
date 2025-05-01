@@ -169,83 +169,81 @@
     ];
 
     const prizeLevels = [
-      1000, 5000, 10000, 50000, 100000,
-      250000, 500000, 1000000, 2500000, 5000000, 10000000
-    ];
+    1000, 5000, 10000, 50000, 100000,
+    250000, 500000, 1000000, 2500000, 5000000, 10000000
+  ];
 
-    let currentQuestion = 0;
-    let currentPrize = 0;
-    let lifelineUsed = false;
+  let currentQuestion = 0;
+  let currentPrize = 0;
+  let lifelineUsed = false;
 
-    const questionEl = document.getElementById("question");
-    const prizeEl = document.getElementById("prize");
-    const resultEl = document.getElementById("result");
-    const levelEl = document.getElementById("level");
-    const optionBtns = document.querySelectorAll(".option-btn");
-    const lifelineBtn = document.getElementById("lifeline-btn");
+  const questionEl = document.getElementById("question");
+  const prizeEl = document.getElementById("prize");
+  const resultEl = document.getElementById("result");
+  const levelEl = document.getElementById("level");
+  const optionBtns = document.querySelectorAll(".option-btn");
+  const lifelineBtn = document.getElementById("lifeline-btn");
 
-    function loadQuestion() {
-      const q = questions[currentQuestion];
-      questionEl.textContent = q.question;
-      optionBtns.forEach((btn, index) => {
-        btn.textContent = `${String.fromCharCode(65 + index)}. ${q.options[index]}`;
-        btn.disabled = false;
-        btn.style.visibility = "visible";
-        btn.classList.remove("correct", "wrong");
-      });
-      resultEl.textContent = "";
-      prizeEl.textContent = `Prize: ₹${currentPrize}`;
-      levelEl.textContent = `Level: ${Math.min(5, Math.floor(currentQuestion / 2) + 1)}`;
-    }
+  function loadQuestion() {
+    const q = questions[currentQuestion];
+    questionEl.textContent = q.question;
+    optionBtns.forEach((btn, index) => {
+      btn.textContent = `${String.fromCharCode(65 + index)}. ${q.options[index]}`;
+      btn.disabled = false;
+      btn.style.visibility = "visible";
+      btn.classList.remove("correct", "wrong");
+    });
+    resultEl.textContent = "";
+    prizeEl.textContent = `Prize: ₹${currentPrize}`;
+    levelEl.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+  }
 
-    function selectAnswer(index) {
-      const correct = questions[currentQuestion].answer;
-      disableAllOptions();
+  function selectAnswer(index) {
+    const correct = questions[currentQuestion].answer;
+    disableAllOptions();
 
-      if (index === correct) {
-        optionBtns[index].classList.add("correct");
-        currentPrize = prizeLevels[currentQuestion];
-        resultEl.textContent = `✅ Correct! You won ₹${currentPrize}`;
-        currentQuestion++;
-        if (currentQuestion < questions.length) {
-          setTimeout(loadQuestion, 2000);
-        } else {
-          resultEl.textContent = `🏆 Congratulations! You are a Crorepati! Total: ₹${currentPrize}`;
-        }
+    if (index === correct) {
+      optionBtns[index].classList.add("correct");
+      currentPrize = prizeLevels[currentQuestion];
+      resultEl.textContent = `✅ Correct! You won ₹${currentPrize}. Level ${currentQuestion + 1} is complete.`;
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        setTimeout(loadQuestion, 2000);
       } else {
-        optionBtns[index].classList.add("wrong");
-        optionBtns[correct].classList.add("correct");
-        resultEl.textContent = `❌ Wrong! Correct answer was: ${questions[currentQuestion].options[correct]}`;
+        resultEl.textContent = `🏆 Congratulations! You are a Crorepati! Total: ₹${currentPrize}`;
+      }
+    } else {
+      optionBtns[index].classList.add("wrong");
+      optionBtns[correct].classList.add("correct");
+      resultEl.textContent = `❌ Wrong! Correct answer was: ${questions[currentQuestion].options[correct]}`;
+    }
+  }
+
+  function disableAllOptions() {
+    optionBtns.forEach(btn => btn.disabled = true);
+  }
+
+  function useLifeline() {
+    if (lifelineUsed) return;
+    lifelineUsed = true;
+    lifelineBtn.disabled = true;
+
+    const correct = questions[currentQuestion].answer;
+    let removed = 0;
+    while (removed < 2) {
+      const rand = Math.floor(Math.random() * 4);
+      if (rand !== correct && optionBtns[rand].style.visibility !== "hidden") {
+        optionBtns[rand].style.visibility = "hidden";
+        removed++;
       }
     }
+  }
 
-    function disableAllOptions() {
-      optionBtns.forEach(btn => btn.disabled = true);
-    }
+  function quitGame() {
+    resultEl.textContent = `🏁 You quit! Total winnings: ₹${currentPrize}`;
+    disableAllOptions();
+    lifelineBtn.disabled = true;
+  }
 
-    function useLifeline() {
-      if (lifelineUsed) return;
-      lifelineUsed = true;
-      lifelineBtn.disabled = true;
-
-      const correct = questions[currentQuestion].answer;
-      let removed = 0;
-      while (removed < 2) {
-        const rand = Math.floor(Math.random() * 4);
-        if (rand !== correct && optionBtns[rand].style.visibility !== "hidden") {
-          optionBtns[rand].style.visibility = "hidden";
-          removed++;
-        }
-      }
-    }
-
-    function quitGame() {
-      resultEl.textContent = `🏁 You quit! Total winnings: ₹${currentPrize}`;
-      disableAllOptions();
-      lifelineBtn.disabled = true;
-    }
-
-    loadQuestion();
-  </script>
-</body>
-</html>
+  loadQuestion();
+</script>
