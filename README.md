@@ -1,40 +1,56 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kaun Banega Crorepati</title>
+  <title>Ko Bancha Crorepati</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #0f3057;
+      background: url('kbc_nepal_poster.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: #ffffff;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: space-around;
+      align-items: flex-start;
       height: 100vh;
       margin: 0;
+      padding: 20px;
+      position: relative;
+      z-index: 0;
+    }
+
+    /* Optional overlay for readability */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.6); /* Adjust opacity here */
+      z-index: -1;
     }
 
     .container {
-      text-align: center;
       max-width: 600px;
-      padding: 20px;
-      background-color: #00587a;
+      background-color: rgba(0, 88, 122, 0.9);
       border-radius: 10px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .sidebar {
+      background-color: rgba(0, 63, 92, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      margin-left: 20px;
+      min-width: 250px;
     }
 
     h1 {
-      margin-bottom: 10px;
-    }
-
-    #prize, #level {
-      font-size: 1.1em;
-      font-weight: bold;
-      margin-bottom: 5px;
+      text-align: center;
     }
 
     #question {
-      font-size: 1.2em;
+      font-size: 1.4em;
       margin-bottom: 20px;
     }
 
@@ -45,191 +61,80 @@
     }
 
     .option-btn {
-      padding: 10px;
+      padding: 15px;
       background-color: #00adb5;
       border: none;
       border-radius: 5px;
       color: white;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s;
+      font-size: 1.1em;
+    }
+
+    .option-btn.selected {
+      background-color: #ffaa00 !important;
     }
 
     .option-btn.correct {
       background-color: #28a745 !important;
     }
 
-    .option-btn.wrong {
+    .option-btn.incorrect {
       background-color: #dc3545 !important;
     }
 
     .option-btn:disabled {
       cursor: not-allowed;
-      opacity: 0.7;
     }
 
     .lifeline-box {
       margin-top: 20px;
+      text-align: center;
     }
 
-    #result {
+    #result, #levelComplete {
       margin-top: 20px;
       font-size: 1.1em;
+      text-align: center;
+    }
+
+    #timer {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .level {
+      padding: 5px 0;
+      border-bottom: 1px solid #ffffff22;
+    }
+
+    .active-level {
+      color: gold;
+      font-weight: bold;
+    }
+
+    .super-sawaal {
+      background-color: orange;
+      padding: 2px 5px;
+      border-radius: 5px;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .team {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #aaa;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🪙 Kaun Banega Crorepati 🪙</h1>
-    <div id="level">Level: 1</div>
-    <div id="prize">Prize: ₹0</div>
-    <div id="question-box">
-      <h2 id="question">Loading...</h2>
-      <div class="options">
-        <button class="option-btn" onclick="selectAnswer(0)">A</button>
-        <button class="option-btn" onclick="selectAnswer(1)">B</button>
-        <button class="option-btn" onclick="selectAnswer(2)">C</button>
-        <button class="option-btn" onclick="selectAnswer(3)">D</button>
-      </div>
-    </div>
-    <div class="lifeline-box">
-      <button id="lifeline-btn" onclick="useLifeline()">Use 50:50 Lifeline</button>
-      <button onclick="quitGame()">Quit</button>
-    </div>
-    <div id="result"></div>
-  </div>
+  <!-- All your body content remains unchanged -->
+  <!-- Keep the rest of your code here, starting from <div class="container">... -->
 
-  <script>
-    const questions = [
-      {
-        question: "Which planet is known as the Red Planet?",
-        options: ["Earth", "Venus", "Mars", "Jupiter"],
-        answer: 2,
-      },
-      {
-        question: "Who wrote the Indian National Anthem?",
-        options: [
-          "Bankim Chandra Chatterjee",
-          "Rabindranath Tagore",
-          "Subhash Chandra Bose",
-          "Jawaharlal Nehru",
-        ],
-        answer: 1,
-      },
-      {
-        question: "What is the capital of Australia?",
-        options: ["Sydney", "Melbourne", "Perth", "Canberra"],
-        answer: 3,
-      },
-      {
-        question: "Who was the first Prime Minister of India?",
-        options: [
-          "Sardar Patel",
-          "Rajendra Prasad",
-          "Jawaharlal Nehru",
-          "Lal Bahadur Shastri",
-        ],
-        answer: 2,
-      },
-      {
-        question: "Which is the largest ocean?",
-        options: ["Atlantic", "Indian", "Pacific", "Arctic"],
-        answer: 2,
-      },
-      {
-        question: "Which is the Dumbest Sea Creature?",
-        options: ["Shark", "Dolphin", "Ocean Sunfish", "Dumbo octopus"],
-        answer: 2,
-      },
-      {
-        question: "Where was the first FIFA World Cup held?",
-        options: ["Brazil", "Uruguay", "Nepal", "China"],
-        answer: 1,
-      },
-      {
-        question: "Which is the Richest Football Club?",
-        options: ["Chelsea FC", "FC Barcelona", "Manchester City", "Real Madrid"],
-        answer: 3,
-      },
-      {
-        question: "When was first World War started?",
-        options: ["1914", "1969", "1823", "1916"],
-        answer: 0,
-      },
-      {
-        question: "Strongest man in the world?",
-        options: ["Tarun Gill", "Tom Stoltman", "Dwayne Johnson", "Nick Best"],
-        answer: 1,
-      },
-      {
-        question: "What is the speed of Light?",
-        options: ["299 792 458 m / s", "299 612 595 m / s", "299 911 458 m / s", "297 792 696 m / s"],
-        answer: 0,
-      },
-    ];
-
-    const prizeLevels = [
-    1000, 5000, 10000, 50000, 100000,
-    250000, 500000, 1000000, 2500000, 5000000, 10000000
-  ];
-
-  let currentQuestion = 0;
-  let currentPrize = 0;
-  let lifelineUsed = false;
-
-  const questionEl = document.getElementById("question");
-  const prizeEl = document.getElementById("prize");
-  const resultEl = document.getElementById("result");
-  const levelEl = document.getElementById("level");
-  const optionBtns = document.querySelectorAll(".option-btn");
-  const lifelineBtn = document.getElementById("lifeline-btn");
-
- function loadQuestion() {
-  const q = questions[currentQuestion];
-  questionEl.textContent = q.question;
-  optionBtns.forEach((btn, index) => {
-    btn.textContent = `${String.fromCharCode(65 + index)}. ${q.options[index]}`;
-    btn.disabled = false;
-    btn.style.visibility = "visible";
-    btn.classList.remove("correct", "wrong");
-  });
-  resultEl.textContent = "";
-  prizeEl.textContent = `Prize: ₹${currentPrize}`;
-  levelEl.textContent = `Level: ${getCurrentLevel()}`;
-}
-
-function getCurrentLevel() {
-  if (currentQuestion < 2) return 1;
-  if (currentQuestion < 4) return 2;
-  if (currentQuestion < 6) return 3;
-  if (currentQuestion < 8) return 4;
-  return 5;
-}
-
-function selectAnswer(index) {
-  const correct = questions[currentQuestion].answer;
-  disableAllOptions();
-
-  if (index === correct) {
-    optionBtns[index].classList.add("correct");
-    currentPrize = prizeLevels[currentQuestion];
-    const prevLevel = getCurrentLevel();
-    resultEl.textContent = `✅ Correct! You won ₹${currentPrize}`;
-
-    currentQuestion++;
-
-    if (currentQuestion < questions.length) {
-      const nextLevel = getCurrentLevel();
-      if (nextLevel > prevLevel) {
-        resultEl.textContent += ` 🎉 Level ${prevLevel} is complete!`;
-      }
-      setTimeout(loadQuestion, 2000);
-    } else {
-      resultEl.textContent = `🏆 Congratulations! You are a Crorepati! Total: ₹${currentPrize}`;
-    }
-  } else {
-    optionBtns[index].classList.add("wrong");
-    optionBtns[correct].classList.add("correct");
-    resultEl.textContent = `❌ Wrong! Correct answer was: ${questions[currentQuestion].options[correct]}`;
-  }
-}
+  <!-- Existing game content from your code should be inserted below -->
+</body>
+</html>
